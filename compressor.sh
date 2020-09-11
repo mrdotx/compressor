@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/compressor/compressor.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/compressor
-# date:       2020-09-11T19:27:40+0200
+# date:       2020-09-11T21:57:11+0200
 
 script=$(basename "$0")
 help="$script [-h/--help] -- script to compress/extract files and folders
@@ -11,7 +11,7 @@ help="$script [-h/--help] -- script to compress/extract files and folders
     $script [--check]
 
     $script [--add] <path/file>.<ext> [path/file1.ext] [path/file2.ext]
-      <ext>: 7z, tar.bz2, tar.gz, zip
+      <ext>: 7z, tar.bz2, tar.gz, tar.xz, zip
 
     $script <path/file>.<ext> [path/file1.ext] [path/file2.ext]
       <ext>: 7z, apk, arj, bz2, cab, cb7, cbr, cbt, cbz, chm, deb, dmg,
@@ -25,7 +25,7 @@ help="$script [-h/--help] -- script to compress/extract files and folders
   Examples:
     $script --check
     $script --add archive.tar.gz file1.ext file2.ext file3.ext
-    $script file1.tar.gz file2.tar.bz2 file3.7z file4.zip"
+    $script file1.tar.gz file2.tar.bz2 file3.7z"
 
 if [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ $# -eq 0 ]; then
     printf "%s\n" "$help"
@@ -56,21 +56,24 @@ elif [ "$1" = "--check" ]; then
         done
     }
 elif [ "$1" = "--add" ]; then
-    option=$(printf "%s" "$*" \
-        | sed 's/\-\-add//g' \
-    )
-    case "$2" in
+    shift
+    archive="$1"
+    shift
+    case "$archive" in
         *.tar.gz)
-            eval tar cfvz "$option"
+            eval tar cfvz "$archive" "$@"
             ;;
         *.tar.bz2)
-            eval tar cfvj "$option"
+            eval tar cfvj "$archive" "$@"
+            ;;
+        *.tar.xz)
+            eval tar cfvJ "$archive" "$@"
             ;;
         *.7z)
-            eval 7z a "$option"
+            eval 7z a "$archive" "$@"
             ;;
         *.zip)
-            eval zip -r "$option"
+            eval zip -r "$archive" "$@"
             ;;
         *)
             printf "compress: no filename with known extension added\n"
