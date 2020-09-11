@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/compressor/compressor.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/compressor
-# date:       2020-09-11T21:57:11+0200
+# date:       2020-09-11T22:26:46+0200
 
 script=$(basename "$0")
 help="$script [-h/--help] -- script to compress/extract files and folders
@@ -61,19 +61,19 @@ elif [ "$1" = "--add" ]; then
     shift
     case "$archive" in
         *.tar.gz)
-            eval tar cfvz "$archive" "$@"
+            tar cfvz "$archive" "$@"
             ;;
         *.tar.bz2)
-            eval tar cfvj "$archive" "$@"
+            tar cfvj "$archive" "$@"
             ;;
         *.tar.xz)
-            eval tar cfvJ "$archive" "$@"
+            tar cfvJ "$archive" "$@"
             ;;
         *.7z)
-            eval 7z a "$archive" "$@"
+            7z a "$archive" "$@"
             ;;
         *.zip)
-            eval zip -r "$archive" "$@"
+            zip -r "$archive" "$@"
             ;;
         *)
             printf "compress: no filename with known extension added\n"
