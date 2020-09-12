@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/compressor/compressor.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/compressor
-# date:       2020-09-11T22:26:46+0200
+# date:       2020-09-12T09:42:59+0200
 
 script=$(basename "$0")
 help="$script [-h/--help] -- script to compress/extract files and folders
@@ -11,7 +11,7 @@ help="$script [-h/--help] -- script to compress/extract files and folders
     $script [--check]
 
     $script [--add] <path/file>.<ext> [path/file1.ext] [path/file2.ext]
-      <ext>: 7z, tar.bz2, tar.gz, tar.xz, zip
+      <ext>: 7z, tar.bz2, tar.gz, tar.xz, tbz2, tgz, txz, zip
 
     $script <path/file>.<ext> [path/file1.ext] [path/file2.ext]
       <ext>: 7z, apk, arj, bz2, cab, cb7, cbr, cbt, cbz, chm, deb, dmg,
@@ -60,17 +60,17 @@ elif [ "$1" = "--add" ]; then
     archive="$1"
     shift
     case "$archive" in
-        *.tar.gz)
-            tar cfvz "$archive" "$@"
-            ;;
-        *.tar.bz2)
-            tar cfvj "$archive" "$@"
-            ;;
-        *.tar.xz)
-            tar cfvJ "$archive" "$@"
-            ;;
         *.7z)
             7z a "$archive" "$@"
+            ;;
+        *.tar.bz2 | *.tbz2)
+            tar cfvj "$archive" "$@"
+            ;;
+        *.tar.gz | *.tgz)
+            tar cfvz "$archive" "$@"
+            ;;
+        *.tar.xz | *.txz)
+            tar cfvJ "$archive" "$@"
             ;;
         *.zip)
             zip -r "$archive" "$@"
@@ -87,44 +87,66 @@ else
             base="${archive##*/}"
             name="${base%%.*}"
             case "$base" in
-                *.tar|*.tar.gz|*.tar.bz2|*.tar.xz|*.tgz|*.tbz2|*.txz|*.cbt)
-                    mkdir -p "$name"
-                    tar xvf "$archive" -C "$name"
-                    ;;
-                *.7z|*.apk|*.arj|*.cab|*.cb7|*.chm|*.deb|*.dmg|*.iso|*.lzh|*.msi|*.pkg|*.rpm|*.udf|*.wim|*.xar)
-                    mkdir -p "$name"
-                    7z x ./"$archive" -o"$name"
-                    ;;
-                *.zip|*.cbz|*.epub)
-                    mkdir -p "$name"
-                    unzip ./"$archive" -d ./"$name"
-                    ;;
-                *.rar*|.cbr)
-                    unrar x -ad ./"$archive"
-                    ;;
-                *.gz)
-                    gunzip ./"$archive"
-                    ;;
-                *.z)
-                    uncompress ./"$archive"
-                    ;;
-                *.lzma)
-                    unlzma ./"$archive"
-                    ;;
-                *.bz2)
-                    bunzip2 ./"$archive"
-                    ;;
-                *.xz)
-                    unxz ./"$archive"
-                    ;;
+                *.7z | *.7Z \
+                    | *.apk | *.APK \
+                    | *.arj | *.ARJ \
+                    | *.cab | *.CAB \
+                    | *.cb7 | *.CB7 \
+                    | *.chm | *.CHM \
+                    | *.deb | *.DEB \
+                    | *.dmg | *.DMG \
+                    | *.iso | *.ISO \
+                    | *.lzh | *.LZH \
+                    | *.msi | *.MSI \
+                    | *.pkg | *.PKG \
+                    | *.rpm | *.RPM \
+                    | *.udf | *.UDF \
+                    | *.wim | *.WIM \
+                    | *.xar | *.XAR)
+                        mkdir -p "$name"
+                        7z x ./"$archive" -o"$name"
+                        ;;
+                *.tar | *.TAR \
+                    | *.tar.gz | *.TAR.GZ | *.tgz | *.TGZ \
+                    | *.tar.bz2 | *.TAR.BZ2 | *.tbz2 | *.TBZ2 \
+                    | *.tar.xz | *.TAR.XZ | *.txz | *.TXZ \
+                    | *.cbt | *.CBT)
+                        mkdir -p "$name"
+                        tar xvf "$archive" -C "$name"
+                        ;;
+                *.zip | *.ZIP \
+                    | *.epub | *.EPUB \
+                    | *.cbz | *.CBZ)
+                        mkdir -p "$name"
+                        unzip ./"$archive" -d ./"$name"
+                        ;;
+                *.bz2 | *.BZ2)
+                        bunzip2 ./"$archive"
+                        ;;
+                *.gz | *.GZ)
+                        gunzip ./"$archive"
+                        ;;
+                *.lzma | *.LZMA)
+                        unlzma ./"$archive"
+                        ;;
+                *.rar | *.RAR \
+                    | *.cbr | *.CBR)
+                        unrar x -ad ./"$archive"
+                        ;;
+                *.xz | *.XZ)
+                        unxz ./"$archive"
+                        ;;
+                *.z | *.Z)
+                        uncompress ./"$archive"
+                        ;;
                 *)
                     printf "extract: '%s' - unknown archive method\n" "$archive"
                     exit 1
                     ;;
-                esac
-            else
-                printf "'%s' - file does not exist" "$archive"
-                exit 1
-            fi
+            esac
+        else
+            printf "'%s' - file does not exist" "$archive"
+            exit 1
+        fi
     done
 fi
