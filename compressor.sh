@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/compressor/compressor.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/compressor
-# date:       2020-09-12T14:01:07+0200
+# date:       2020-09-13T11:14:46+0200
 
 script=$(basename "$0")
 help="$script [-h/--help] -- script to compress/extract files and folders
@@ -45,8 +45,7 @@ elif [ "$1" = "--check" ]; then
     printf "\n--\n"
 
     printf "%s\n" "$used_tools" | {
-        while IFS= read -r line
-        do
+        while IFS= read -r line; do
             [ -n "$line" ] \
                 && tool=$(printf "%s" "$line" | sed 's/ //g') \
                 &&  if command -v "$tool" > /dev/null 2>&1; then
