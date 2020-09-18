@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/compressor/compressor.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/compressor
-# date:       2020-09-18T18:15:50+0200
+# date:       2020-09-18T18:24:59+0200
 
 script=$(basename "$0")
 help="$script [-h/--help] -- script to compress/extract files and folders
@@ -54,7 +54,7 @@ check() {
     }
 }
 
-add() {
+compress() {
     case "$archive" in
         *.7z)
             7z a "$archive" "$@"
@@ -161,7 +161,7 @@ case "$1" in
         shift
         archive="$1"
         shift
-        add "$@"
+        compress "$@"
         ;;
     *)
         if [ $# -eq 0 ]; then
