@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/compressor/compressor.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/compressor
-# date:       2020-09-13T11:14:46+0200
+# date:       2020-09-18T18:15:50+0200
 
 script=$(basename "$0")
 help="$script [-h/--help] -- script to compress/extract files and folders
@@ -27,10 +27,7 @@ help="$script [-h/--help] -- script to compress/extract files and folders
     $script --add archive.tar.gz file1.ext file2.ext file3.ext
     $script file1.tar.gz file2.tar.bz2 file3.7z"
 
-if [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ $# -eq 0 ]; then
-    printf "%s\n" "$help"
-    exit 1
-elif [ "$1" = "--check" ]; then
+check() {
     used_tools="
         tar
         7z
@@ -55,10 +52,9 @@ elif [ "$1" = "--check" ]; then
                     fi
         done
     }
-elif [ "$1" = "--add" ]; then
-    shift
-    archive="$1"
-    shift
+}
+
+add() {
     case "$archive" in
         *.7z)
             7z a "$archive" "$@"
@@ -80,7 +76,9 @@ elif [ "$1" = "--add" ]; then
             exit 1
             ;;
     esac
-else
+}
+
+extract() {
     for archive in "$@"
     do
         if [ -f "$archive" ] ; then
@@ -149,4 +147,28 @@ else
             exit 1
         fi
     done
-fi
+}
+
+
+case "$1" in
+    -h | --help)
+        printf "%s\n" "$help"
+        ;;
+    --check)
+        check
+        ;;
+    --add)
+        shift
+        archive="$1"
+        shift
+        add "$@"
+        ;;
+    *)
+        if [ $# -eq 0 ]; then
+            printf "%s\n" "$help"
+            exit 1
+        else
+            extract "$@"
+        fi
+        ;;
+esac
