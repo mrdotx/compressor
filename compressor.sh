@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/compressor/compressor.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/compressor
-# date:       2020-09-18T18:24:59+0200
+# date:       2020-09-18T19:16:37+0200
 
 script=$(basename "$0")
 help="$script [-h/--help] -- script to compress/extract files and folders
@@ -72,7 +72,7 @@ compress() {
             zip -r "$archive" "$@"
             ;;
         *)
-            printf "compress: no filename with known extension added\n"
+            printf "compress: unknown extension\n"
             exit 1
             ;;
     esac
@@ -143,7 +143,7 @@ extract() {
                     ;;
             esac
         else
-            printf "'%s' - file does not exist" "$archive"
+            printf "extract: '%s' - file does not exist" "$archive"
             exit 1
         fi
     done
