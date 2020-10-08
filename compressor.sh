@@ -3,29 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/compressor/compressor.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/compressor
-# date:       2020-09-18T19:16:37+0200
-
-script=$(basename "$0")
-help="$script [-h/--help] -- script to compress/extract files and folders
-  Usage:
-    $script [--check]
-
-    $script [--add] <path/file>.<ext> [path/file1.ext] [path/file2.ext]
-      <ext>: 7z, tar.bz2, tar.gz, tar.xz, tbz2, tgz, txz, zip
-
-    $script <path/file>.<ext> [path/file1.ext] [path/file2.ext]
-      <ext>: 7z, apk, arj, bz2, cab, cb7, cbr, cbt, cbz, chm, deb, dmg,
-             epub, gz, iso, lzh, lzma, msi, pkg, rar, rpm, tar, tar.bz2,
-             tar.gz, tar.xz, tbz2, tgz, txz, udf, wim, xar, xz, z, zip
-
-  Settings:
-    [--check] = check if needed tools are installed
-    [--add]   = compress files to archive
-
-  Examples:
-    $script --check
-    $script --add archive.tar.gz file1.ext file2.ext file3.ext
-    $script file1.tar.gz file2.tar.bz2 file3.7z"
+# date:       2020-10-08T11:31:41+0200
 
 check() {
     used_tools="
@@ -38,21 +16,41 @@ check() {
         bzip2
         xz"
 
-    printf "needed tools marked with X are installed"
-    printf "\n--\n"
+    printf "required tools marked with an X are installed\n"
 
     printf "%s\n" "$used_tools" | {
         while IFS= read -r line; do
             [ -n "$line" ] \
                 && tool=$(printf "%s" "$line" | sed 's/ //g') \
                 &&  if command -v "$tool" > /dev/null 2>&1; then
-                        printf "  [X] %s\n" "$tool"
+                        printf "      [X] %s\n" "$tool"
                     else
-                        printf "  [ ] %s\n" "$tool"
+                        printf "      [ ] %s\n" "$tool"
                     fi
         done
     }
 }
+
+script=$(basename "$0")
+help="$script [-h/--help] -- script to compress/extract files and folders
+  Usage:
+    $script [--add] <path/file>.<ext> [path/file1.ext] [path/file2.ext]
+      <ext>: 7z, tar.bz2, tar.gz, tar.xz, tbz2, tgz, txz, zip
+
+    $script <path/file>.<ext> [path/file1.ext] [path/file2.ext]
+      <ext>: 7z, apk, arj, bz2, cab, cb7, cbr, cbt, cbz, chm, deb, dmg,
+             epub, gz, iso, lzh, lzma, msi, pkg, rar, rpm, tar, tar.bz2,
+             tar.gz, tar.xz, tbz2, tgz, txz, udf, wim, xar, xz, z, zip
+
+  Settings:
+    [--add]   = compress files to archive
+
+  Examples:
+    $script --add archive.tar.gz file1.ext file2.ext file3.ext
+    $script file1.tar.gz file2.tar.bz2 file3.7z
+
+  Programs:
+    $(check)"
 
 compress() {
     case "$archive" in
@@ -153,9 +151,6 @@ extract() {
 case "$1" in
     -h | --help)
         printf "%s\n" "$help"
-        ;;
-    --check)
-        check
         ;;
     --add)
         shift
