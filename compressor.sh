@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/compressor/compressor.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/compressor
-# date:       2020-10-08T11:31:41+0200
+# date:       2020-10-08T18:50:25+0200
 
 check() {
     used_tools="
@@ -43,7 +43,7 @@ help="$script [-h/--help] -- script to compress/extract files and folders
              tar.gz, tar.xz, tbz2, tgz, txz, udf, wim, xar, xz, z, zip
 
   Settings:
-    [--add]   = compress files to archive
+    [--add] = compress files to archive
 
   Examples:
     $script --add archive.tar.gz file1.ext file2.ext file3.ext
