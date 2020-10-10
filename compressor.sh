@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/compressor/compressor.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/compressor
-# date:       2020-10-08T18:50:25+0200
+# date:       2020-10-10T15:41:13+0200
 
 check() {
     used_tools="
@@ -16,7 +16,7 @@ check() {
         bzip2
         xz"
 
-    printf "required tools marked with an X are installed\n"
+    printf "required tools for full functionality. tools marked with an X are installed\n"
 
     printf "%s\n" "$used_tools" | {
         while IFS= read -r line; do
