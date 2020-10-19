@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/compressor/compressor.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/compressor
-# date:       2020-10-10T15:41:13+0200
+# date:       2020-10-19T19:15:40+0200
 
 check() {
     used_tools="
@@ -79,7 +79,7 @@ compress() {
 extract() {
     for archive in "$@"
     do
-        if [ -f "$archive" ] ; then
+        if [ -f "$archive" ]; then
             base="${archive##*/}"
             name="${base%%.*}"
             case "$base" in
