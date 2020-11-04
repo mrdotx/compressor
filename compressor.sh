@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/compressor/compressor.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/compressor
-# date:       2020-10-19T19:15:40+0200
+# date:       2020-11-04T11:53:03+0100
 
 check() {
     used_tools="
@@ -100,7 +100,7 @@ extract() {
                     | *.wim | *.WIM \
                     | *.xar | *.XAR)
                         mkdir -p "$name"
-                        7z x ./"$archive" -o"$name"
+                        7z x "$archive" -o"$name"
                         ;;
                 *.tar | *.TAR \
                     | *.tar.gz | *.TAR.GZ | *.tgz | *.TGZ \
@@ -114,26 +114,26 @@ extract() {
                     | *.epub | *.EPUB \
                     | *.cbz | *.CBZ)
                         mkdir -p "$name"
-                        unzip ./"$archive" -d ./"$name"
+                        unzip "$archive" -d "$name"
                         ;;
                 *.bz2 | *.BZ2)
-                        bunzip2 ./"$archive"
+                        bunzip2 "$archive"
                         ;;
                 *.gz | *.GZ)
-                        gunzip ./"$archive"
+                        gunzip "$archive"
                         ;;
                 *.lzma | *.LZMA)
-                        unlzma ./"$archive"
+                        unlzma "$archive"
                         ;;
                 *.rar | *.RAR \
                     | *.cbr | *.CBR)
-                        unrar x -ad ./"$archive"
+                        unrar x -ad "$archive"
                         ;;
                 *.xz | *.XZ)
-                        unxz ./"$archive"
+                        unxz "$archive"
                         ;;
                 *.z | *.Z)
-                        uncompress ./"$archive"
+                        uncompress "$archive"
                         ;;
                 *)
                     printf "extract: '%s' - unknown archive method\n" "$archive"
