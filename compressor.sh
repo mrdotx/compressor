@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/compressor/compressor.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/compressor
-# date:       2020-11-04T11:53:03+0100
+# date:       2020-11-05T10:21:55+0100
 
 check() {
     used_tools="
@@ -80,59 +80,41 @@ extract() {
     for archive in "$@"
     do
         if [ -f "$archive" ]; then
-            base="${archive##*/}"
+            base="$(printf "%s" "${archive##*/}" \
+                    | tr '[:upper:]' '[:lower:]')"
             name="${base%%.*}"
             case "$base" in
-                *.7z | *.7Z \
-                    | *.apk | *.APK \
-                    | *.arj | *.ARJ \
-                    | *.cab | *.CAB \
-                    | *.cb7 | *.CB7 \
-                    | *.chm | *.CHM \
-                    | *.deb | *.DEB \
-                    | *.dmg | *.DMG \
-                    | *.iso | *.ISO \
-                    | *.lzh | *.LZH \
-                    | *.msi | *.MSI \
-                    | *.pkg | *.PKG \
-                    | *.rpm | *.RPM \
-                    | *.udf | *.UDF \
-                    | *.wim | *.WIM \
-                    | *.xar | *.XAR)
+                *.7z | *.apk | *.arj | *.cab | *.cb7 | *.chm | *.deb | *.dmg \
+                    | *.iso | *.lzh | *.msi | *.pkg | *.rpm | *.udf | *.wim \
+                    | *.xar)
                         mkdir -p "$name"
                         7z x "$archive" -o"$name"
                         ;;
-                *.tar | *.TAR \
-                    | *.tar.gz | *.TAR.GZ | *.tgz | *.TGZ \
-                    | *.tar.bz2 | *.TAR.BZ2 | *.tbz2 | *.TBZ2 \
-                    | *.tar.xz | *.TAR.XZ | *.txz | *.TXZ \
-                    | *.cbt | *.CBT)
+                *.tar | *.tar.gz | *.tgz | *.tar.bz2 | *.tbz2 | *.tar.xz \
+                    | *.txz | *.cbt)
                         mkdir -p "$name"
                         tar xvf "$archive" -C "$name"
                         ;;
-                *.zip | *.ZIP \
-                    | *.epub | *.EPUB \
-                    | *.cbz | *.CBZ)
+                *.zip | *.epub | *.cbz)
                         mkdir -p "$name"
                         unzip "$archive" -d "$name"
                         ;;
-                *.bz2 | *.BZ2)
+                *.bz2)
                         bunzip2 "$archive"
                         ;;
-                *.gz | *.GZ)
+                *.gz)
                         gunzip "$archive"
                         ;;
-                *.lzma | *.LZMA)
+                *.lzma)
                         unlzma "$archive"
                         ;;
-                *.rar | *.RAR \
-                    | *.cbr | *.CBR)
+                *.rar | *.cbr)
                         unrar x -ad "$archive"
                         ;;
-                *.xz | *.XZ)
+                *.xz)
                         unxz "$archive"
                         ;;
-                *.z | *.Z)
+                *.z)
                         uncompress "$archive"
                         ;;
                 *)
