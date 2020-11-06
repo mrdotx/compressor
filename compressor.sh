@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/compressor/compressor.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/compressor
-# date:       2020-11-05T10:21:55+0100
+# date:       2020-11-06T15:07:06+0100
 
 check() {
     used_tools="
@@ -35,12 +35,12 @@ script=$(basename "$0")
 help="$script [-h/--help] -- script to compress/extract files and folders
   Usage:
     $script [--add] <path/file>.<ext> [path/file1.ext] [path/file2.ext]
-      <ext>: 7z, tar.bz2, tar.gz, tar.xz, tbz2, tgz, txz, zip
+      <ext>: 7z, tar.bz2, tar.gz, tar.xz, tar.zst, tbz2, tgz, txz, zip
 
     $script <path/file>.<ext> [path/file1.ext] [path/file2.ext]
-      <ext>: 7z, apk, arj, bz2, cab, cb7, cbr, cbt, cbz, chm, deb, dmg,
-             epub, gz, iso, lzh, lzma, msi, pkg, rar, rpm, tar, tar.bz2,
-             tar.gz, tar.xz, tbz2, tgz, txz, udf, wim, xar, xz, z, zip
+      <ext>: 7z, apk, arj, bz2, cab, cb7, cbr, cbt, cbz, chm, deb, dmg, epub,
+             gz, iso, lzh, lzma, msi, pkg, rar, rpm, tar, tar.bz2, tar.gz,
+             tar.xz, tar.zst, tbz2, tgz, txz, udf, wim, xar, xz, z, zip
 
   Settings:
     [--add] = compress files to archive
@@ -65,6 +65,9 @@ compress() {
             ;;
         *.tar.xz | *.txz)
             tar cfvJ "$archive" "$@"
+            ;;
+        *.tar.zst)
+            tar cfv "$archive" "$@" --zstd
             ;;
         *.zip)
             zip -r "$archive" "$@"
@@ -91,7 +94,7 @@ extract() {
                         7z x "$archive" -o"$name"
                         ;;
                 *.tar | *.tar.gz | *.tgz | *.tar.bz2 | *.tbz2 | *.tar.xz \
-                    | *.txz | *.cbt)
+                    | *.txz | *.tar.zst | *.cbt)
                         mkdir -p "$name"
                         tar xvf "$archive" -C "$name"
                         ;;
