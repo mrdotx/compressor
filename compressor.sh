@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/compressor/compressor.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/compressor
-# date:       2020-11-06T15:07:06+0100
+# date:       2020-11-06T22:56:55+0100
 
 check() {
     used_tools="
@@ -99,27 +99,27 @@ extract() {
                         tar xvf "$archive" -C "$name"
                         ;;
                 *.zip | *.epub | *.cbz)
-                        mkdir -p "$name"
-                        unzip "$archive" -d "$name"
-                        ;;
+                    mkdir -p "$name"
+                    unzip "$archive" -d "$name"
+                    ;;
                 *.bz2)
-                        bunzip2 "$archive"
-                        ;;
+                    bunzip2 "$archive"
+                    ;;
                 *.gz)
-                        gunzip "$archive"
-                        ;;
+                    gunzip "$archive"
+                    ;;
                 *.lzma)
-                        unlzma "$archive"
-                        ;;
+                    unlzma "$archive"
+                    ;;
                 *.rar | *.cbr)
-                        unrar x -ad "$archive"
-                        ;;
+                    unrar x -ad "$archive"
+                    ;;
                 *.xz)
-                        unxz "$archive"
-                        ;;
+                    unxz "$archive"
+                    ;;
                 *.z)
-                        uncompress "$archive"
-                        ;;
+                    uncompress "$archive"
+                    ;;
                 *)
                     printf "extract: '%s' - unknown archive method\n" "$archive"
                     exit 1
