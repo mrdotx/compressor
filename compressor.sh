@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/compressor/compressor.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/compressor
-# date:       2020-11-06T22:56:55+0100
+# date:       2020-12-28T21:10:44+0100
 
 check() {
     used_tools="
@@ -21,11 +21,12 @@ check() {
     printf "%s\n" "$used_tools" | {
         while IFS= read -r line; do
             [ -n "$line" ] \
-                && tool=$(printf "%s" "$line" | sed 's/ //g') \
-                &&  if command -v "$tool" > /dev/null 2>&1; then
-                        printf "      [X] %s\n" "$tool"
+                && line=$(printf "%s" "$line" \
+                    | sed 's/ //g') \
+                &&  if command -v "$line" > /dev/null 2>&1; then
+                        printf "      [X] %s\n" "$line"
                     else
-                        printf "      [ ] %s\n" "$tool"
+                        printf "      [ ] %s\n" "$line"
                     fi
         done
     }
