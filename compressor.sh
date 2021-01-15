@@ -1,9 +1,9 @@
 #!/bin/sh
 
-# path:       /home/klassiker/.local/share/repos/compressor/compressor.sh
-# author:     klassiker [mrdotx]
-# github:     https://github.com/mrdotx/compressor
-# date:       2020-12-28T21:10:44+0100
+# path:   /home/klassiker/.local/share/repos/compressor/compressor.sh
+# author: klassiker [mrdotx]
+# github: https://github.com/mrdotx/compressor
+# date:   2021-01-15T13:30:50+0100
 
 check() {
     used_tools="
