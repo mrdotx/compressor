@@ -3,7 +3,7 @@
 # path:   /home/klassiker/.local/share/repos/compressor/compressor.sh
 # author: klassiker [mrdotx]
 # github: https://github.com/mrdotx/compressor
-# date:   2021-01-15T13:30:50+0100
+# date:   2021-07-07T07:45:45+0200
 
 check() {
     used_tools="
@@ -40,7 +40,7 @@ help="$script [-h/--help] -- script to compress/extract files and folders
 
     $script <path/file>.<ext> [path/file1.ext] [path/file2.ext]
       <ext>: 7z, apk, arj, bz2, cab, cb7, cbr, cbt, cbz, chm, deb, dmg, epub,
-             gz, iso, lzh, lzma, msi, pkg, rar, rpm, tar, tar.bz2, tar.gz,
+             exe, gz, iso, lzh, lzma, msi, pkg, rar, rpm, tar, tar.bz2, tar.gz,
              tar.xz, tar.zst, tbz2, tgz, txz, udf, wim, xar, xz, z, zip
 
   Settings:
@@ -89,8 +89,8 @@ extract() {
             name="${base%%.*}"
             case "$base" in
                 *.7z | *.apk | *.arj | *.cab | *.cb7 | *.chm | *.deb | *.dmg \
-                    | *.iso | *.lzh | *.msi | *.pkg | *.rpm | *.udf | *.wim \
-                    | *.xar)
+                    | *.exe | *.iso | *.lzh | *.msi | *.pkg | *.rpm | *.udf \
+                    | *.wim | *.xar)
                         mkdir -p "$name"
                         7z x "$archive" -o"$name"
                         ;;
