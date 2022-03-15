@@ -3,7 +3,7 @@
 # path:   /home/klassiker/.local/share/repos/compressor/compressor.sh
 # author: klassiker [mrdotx]
 # github: https://github.com/mrdotx/compressor
-# date:   2021-07-07T07:45:45+0200
+# date:   2022-03-15T19:28:42+0100
 
 check() {
     used_tools="
@@ -18,18 +18,15 @@ check() {
 
     printf "required tools for full functionality. tools marked with an X are installed\n"
 
-    printf "%s\n" "$used_tools" | {
-        while IFS= read -r line; do
-            [ -n "$line" ] \
-                && line=$(printf "%s" "$line" \
-                    | sed 's/ //g') \
+    for line in $used_tools; do
+        line=$(printf "%s" "$line" \
+            | sed 's/ //g') \
                 &&  if command -v "$line" > /dev/null 2>&1; then
-                        printf "      [X] %s\n" "$line"
-                    else
-                        printf "      [ ] %s\n" "$line"
-                    fi
-        done
-    }
+                    printf "      [X] %s\n" "$line"
+                else
+                    printf "      [ ] %s\n" "$line"
+                fi
+    done
 }
 
 script=$(basename "$0")
@@ -81,8 +78,7 @@ compress() {
 }
 
 extract() {
-    for archive in "$@"
-    do
+    for archive in "$@"; do
         if [ -f "$archive" ]; then
             base="$(printf "%s" "${archive##*/}" \
                     | tr '[:upper:]' '[:lower:]')"
