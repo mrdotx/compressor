@@ -3,7 +3,7 @@
 # path:   /home/klassiker/.local/share/repos/compressor/compressor.sh
 # author: klassiker [mrdotx]
 # github: https://github.com/mrdotx/compressor
-# date:   2022-03-15T19:28:42+0100
+# date:   2022-04-26T11:58:24+0200
 
 check() {
     used_tools="
@@ -82,7 +82,7 @@ extract() {
         if [ -f "$archive" ]; then
             base="$(printf "%s" "${archive##*/}" \
                     | tr '[:upper:]' '[:lower:]')"
-            name="${base%%.*}"
+            name="${base%.*}"
             case "$base" in
                 *.7z | *.apk | *.arj | *.cab | *.cb7 | *.chm | *.deb | *.dmg \
                     | *.exe | *.iso | *.lzh | *.msi | *.pkg | *.rpm | *.udf \
