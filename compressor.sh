@@ -3,29 +3,19 @@
 # path:   /home/klassiker/.local/share/repos/compressor/compressor.sh
 # author: klassiker [mrdotx]
 # github: https://github.com/mrdotx/compressor
-# date:   2022-04-26T11:58:24+0200
+# date:   2022-08-07T11:07:49+0200
 
 check() {
-    used_tools="
-        tar
-        7z
-        zip
-        unzip
-        unrar
-        gzip
-        bzip2
-        xz"
+    tools="7z bzip2 gzip tar unrar unzip xz zip zstd"
 
     printf "required tools for full functionality. tools marked with an X are installed\n"
 
-    for line in $used_tools; do
-        line=$(printf "%s" "$line" \
-            | sed 's/ //g') \
-                &&  if command -v "$line" > /dev/null 2>&1; then
-                    printf "      [X] %s\n" "$line"
-                else
-                    printf "      [ ] %s\n" "$line"
-                fi
+    for tool in $tools; do
+        if command -v "$tool" > /dev/null 2>&1; then
+            printf "      [X] %s\n" "$tool"
+        else
+            printf "      [ ] %s\n" "$tool"
+        fi
     done
 }
 
@@ -51,6 +41,9 @@ help="$script [-h/--help] -- script to compress/extract files and folders
     $(check)"
 
 compress() {
+    archive="$1"
+    shift
+
     case "$archive" in
         *.7z)
             7z a "$archive" "$@"
@@ -82,70 +75,88 @@ extract() {
         if [ -f "$archive" ]; then
             base="$(printf "%s" "${archive##*/}" \
                     | tr '[:upper:]' '[:lower:]')"
-            name="${base%.*}"
+            folder="${base%.*}"
             case "$base" in
                 *.7z | *.apk | *.arj | *.cab | *.cb7 | *.chm | *.deb | *.dmg \
                     | *.exe | *.iso | *.lzh | *.msi | *.pkg | *.rpm | *.udf \
                     | *.wim | *.xar)
-                        mkdir -p "$name"
-                        7z x "$archive" -o"$name"
-                        ;;
+                    printf "7z x \"%s\" -o\"%s\"\n" "$archive" "$folder" \
+                        && mkdir -p "$folder" \
+                        && 7z x "$archive" -o"$folder" >/dev/null 2>&1 &
+                    ;;
                 *.tar | *.tar.gz | *.tgz | *.tar.bz2 | *.tbz2 | *.tar.xz \
                     | *.txz | *.tar.zst | *.cbt)
-                        mkdir -p "$name"
-                        tar xvf "$archive" -C "$name"
-                        ;;
+                    folder="${folder%%.tar}"
+                    printf "tar xvf \"%s\" -C \"%s\"\n" "$archive" "$folder"\
+                        && mkdir -p "$folder" \
+                        && tar xvf "$archive" -C "$folder" >/dev/null 2>&1 &
+                    ;;
                 *.zip | *.epub | *.cbz)
-                    mkdir -p "$name"
-                    unzip "$archive" -d "$name"
+                    printf "unzip \"%s\" -d \"%s\"\n" "$archive" "$folder" \
+                        && mkdir -p "$folder" \
+                        && unzip "$archive" -d "$folder" >/dev/null 2>&1 &
                     ;;
                 *.bz2)
-                    bunzip2 "$archive"
+                    printf "bunzip2 \"%s\"\n" "$archive" \
+                        && bunzip2 "$archive" >/dev/null 2>&1 &
                     ;;
                 *.gz)
-                    gunzip "$archive"
+                    printf "gunzip \"%s\"\n" "$archive" \
+                        && gunzip "$archive" >/dev/null 2>&1 &
                     ;;
                 *.lzma)
-                    unlzma "$archive"
+                    printf "unlzma \"%s\"\n" "$archive" \
+                        && unlzma "$archive" >/dev/null 2>&1 &
                     ;;
                 *.rar | *.cbr)
-                    unrar x -ad "$archive"
+                    printf "unrar x -ad \"%s\"\n" "$archive" \
+                        && unrar x -ad "$archive" >/dev/null 2>&1 &
                     ;;
                 *.xz)
-                    unxz "$archive"
+                    printf "unxz \"%s\"\n" "$archive" \
+                        && unxz "$archive" >/dev/null 2>&1 &
                     ;;
                 *.z)
-                    uncompress "$archive"
+                    printf "uncompress \"%s\"\n" "$archive" \
+                        && uncompress "$archive" >/dev/null 2>&1 &
                     ;;
                 *)
-                    printf "extract: '%s' - unknown archive method\n" "$archive"
+                    printf "extract \"%s\": unknown archive method\n" "$archive"
                     exit 1
                     ;;
             esac
         else
-            printf "extract: '%s' - file does not exist" "$archive"
+            printf "extract \"%s\": file does not exist\n" "$archive"
             exit 1
         fi
     done
+
+    # wait for completion of the extraction processes
+    processes="bdstar gunzip bunzip2 unxz unzlma uncompress unzip unrar 7z"
+
+    wait_for() {
+        for process in $1; do
+            pgrep -x "$process" >/dev/null \
+                && return 0
+        done
+    }
+
+    while wait_for "$processes" ; do
+        sleep 1
+    done
+
+    printf "processes completed\n"
 }
 
-
 case "$1" in
-    -h | --help)
+    -h | --help | "")
         printf "%s\n" "$help"
         ;;
     --add)
         shift
-        archive="$1"
-        shift
         compress "$@"
         ;;
     *)
-        if [ $# -eq 0 ]; then
-            printf "%s\n" "$help"
-            exit 1
-        else
-            extract "$@"
-        fi
+        extract "$@"
         ;;
 esac
